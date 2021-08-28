@@ -2,20 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import Book from './Book/Book'
 
-const h1Style = {
-  color: 'red',
-  boxShadow: '2px 2px 10px red',
-  fontSize: '40px'
-}
-
 class App extends Component {
   state = {
-    book: [
+    books: [
       { name: 'Harry Potter', year: 2005 },
       { name: 'Avatar', year: 2008 },
       { name: 'Marvel', year: 1995 },
+      { name: 'Shaytanat', year: 1997 },
     ],
-    title: 'Hello from state'
+    title: 'Hello from state',
+    showComponents: false
   }
 
   changeTitle = () => {
@@ -26,28 +22,77 @@ class App extends Component {
     })
   }
 
-  changeTitleFromComponent = (name) => {
+  onChangeHandler = (event) => {
+    // console.log('Changed', event.target.value);
+    let val = event.target.value
+    this.setState({
+      title: val
+    })
+  }
 
+  changeToggleComponents(show) {
+    this.setState({
+      showComponents: !show
+    })
+    // console.log('Changed', show);
+  }
+
+  changeTitleFromComponent = (name) => {
     this.setState({
       title: name
     })
+  }
 
+  inputChangeHandler(val, index) {
+    const books = [...this.state.books]
+    books[index].name = val
+    this.setState({
+      books
+    })
+  }
+
+  deleteHandler(index) {
+    // console.log('Try to delete', index);
+
+    let books = [...this.state.books]
+
+    books.splice(index, 1)
+
+    this.setState({
+      books
+    })
   }
 
   render() {
-    const book = this.state.book[0]
-    const book1 = this.state.book[1]
-    const book2 = this.state.book[2]
+    let books = null
+    if (this.state.showComponents) {
+      books = this.state.books.map((val, index) => {
+        return (
+          <Book
+            key={index}
+            name={val.name}
+            year={val.year}
+            onChange={this.changeTitleFromComponent.bind(this, val.name)}
+            inputHandler={(event) => { this.inputChangeHandler(event.target.value, index) }}
+            onDelete={(event) => { this.deleteHandler(index) }}
+            inputValue={val.name}
+          />
+        )
+      })
+    } else {
+      books = null
+    }
 
     return (
       <div className="App" >
-        <h1 style={h1Style}>{this.state.title}</h1>
-
+        <h1 className="headTitle">{this.state.title}</h1>
+        <i className="fab fa-battle-net"></i>
+        <input type="text" onChange={this.onChangeHandler} />
         <button onClick={this.changeTitle}>Click</button>
-
-        <Book name={book.name} year={book.year} onChange={this.changeTitleFromComponent.bind(this, book.name)} />
-        <Book name={book1.name} year={book1.year} onChange={this.changeTitleFromComponent.bind(this, book1.name)} />
-        <Book name={book2.name} year={book2.year} onChange={() => { this.changeTitleFromComponent(book2.name) }} />
+        <br />
+        <br />
+        <button onClick={() => { this.changeToggleComponents(this.state.showComponents) }}>Toggle</button>
+        {books}
       </div>
     );
   }
