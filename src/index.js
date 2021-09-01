@@ -6,8 +6,7 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
-  
+    <App onAlert={() => alert('APP bosildi')} />
   </React.StrictMode>,
   document.getElementById('root')
 );

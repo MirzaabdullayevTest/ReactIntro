@@ -1,22 +1,37 @@
 import React, { Component } from 'react';
-import './App.css';
+import classes from './App.module.css';
 import Book from './Book/Book'
 
+// console.log(classes);
+
 class App extends Component {
-  state = {
-    books: [
-      { name: 'Harry Potter', year: 2005 },
-      { name: 'Avatar', year: 2008 },
-      { name: 'Marvel', year: 1995 },
-      { name: 'Shaytanat', year: 1997 },
-    ],
-    title: 'Hello from state',
-    showComponents: false
+  constructor(props) {
+    console.log('App constructor');
+    super(props)
+
+    this.state = {
+      books: [
+        { name: 'Harry Potter', year: 2005 },
+        // { name: 'Avatar', year: 2008 },
+        // { name: 'Marvel', year: 1995 },
+        // { name: 'Shaytanat', year: 1997 },
+      ],
+      title: 'Hello from state',
+      showComponents: false,
+      clickHandler: props.onAlert
+    }
+  }
+
+  componentWillMount() {
+    console.log('App componentWillMount');
+  }
+
+  componentDidMount() {
+    console.log('App componentDidMount');
   }
 
   changeTitle = () => {
     // console.log('Clicked');
-
     this.setState({
       title: 'Changed Title'
     })
@@ -64,6 +79,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('App render');
     let books = null
     if (this.state.showComponents) {
       books = this.state.books.map((val, index) => {
@@ -83,9 +99,12 @@ class App extends Component {
       books = null
     }
 
+    let cls = [classes.App]
+
+    // cls.push('casdasd')
     return (
-      <div className="App" >
-        <h1 className="headTitle">{this.state.title}</h1>
+      <div className={cls.join(' ')}>
+        <h1 className={classes.headTitle}>{this.state.title}</h1>
         <i className="fab fa-battle-net"></i>
         <input type="text" onChange={this.onChangeHandler} />
         <button onClick={this.changeTitle}>Click</button>
@@ -93,6 +112,7 @@ class App extends Component {
         <br />
         <button onClick={() => { this.changeToggleComponents(this.state.showComponents) }}>Toggle</button>
         {books}
+        <button onClick={this.state.clickHandler}>alert</button>
       </div>
     );
   }
