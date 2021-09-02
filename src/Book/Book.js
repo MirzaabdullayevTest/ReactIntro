@@ -1,6 +1,7 @@
 import React from 'react';
 import './Book.css'
 // import Radium from 'radium';
+import withClass from '../hoc/withClass';
 
 const randomColor = ['red', 'green', 'blue', 'yellow', 'pink', 'orange', 'white']
 const randomN = Math.floor(Math.random() * randomColor.length)
@@ -21,9 +22,15 @@ class Book extends React.Component {
         return this.props.inputValue.trim() !== nextProps.inputValue.trim()
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('Book componentWillUpdate', nextProps, nextState);
-    }
+    // componentWillUpdate(nextProps, nextState) {
+    //     console.log('Book componentWillUpdate', nextProps, nextState);
+    // }
+
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     console.log('Book getDerivedStateFromProps', nextProps, prevState);
+    //     // this.setState({ })
+    //     return prevState
+    // }
 
     componentDidUpdate() {
         console.log('Book componentDidUpdate');
@@ -33,8 +40,17 @@ class Book extends React.Component {
         console.log('Book componentWillUnmount');
     }
 
+    getSnapshotBeforeUpdate() {
+        console.log('Book getSnapshotBeforeUpdate');
+    }
+
     render() {
         console.log('Book render');
+
+        if (Math.random() < 0) {
+            throw Error('Book compenent error')
+        }
+
         const cls = ['input']
         const style = {
             border: ' 2px solid rgb(41, 41, 41)',
@@ -55,6 +71,8 @@ class Book extends React.Component {
         if (this.props.inputValue.length <= 6) {
             cls.push('bold')
         }
+
+
         return (
             <div className="componentBlog" style={style} >
                 <h3>Name: <strong>{this.props.name}</strong></h3>
@@ -75,4 +93,4 @@ class Book extends React.Component {
 }
 
 // export default Radium(Book)
-export default Book
+export default withClass(Book, 'BookComponent')

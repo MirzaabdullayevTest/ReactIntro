@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './App.module.css';
 import Book from './Book/Book'
+import Counter from './Counter/Counter';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 // console.log(classes);
 
@@ -84,15 +86,16 @@ class App extends Component {
     if (this.state.showComponents) {
       books = this.state.books.map((val, index) => {
         return (
-          <Book
-            key={index}
-            name={val.name}
-            year={val.year}
-            onChange={this.changeTitleFromComponent.bind(this, val.name)}
-            inputHandler={(event) => { this.inputChangeHandler(event.target.value, index) }}
-            onDelete={(event) => { this.deleteHandler(index) }}
-            inputValue={val.name}
-          />
+          <ErrorBoundary key={index}>
+            <Book
+              name={val.name}
+              year={val.year}
+              onChange={this.changeTitleFromComponent.bind(this, val.name)}
+              inputHandler={(event) => { this.inputChangeHandler(event.target.value, index) }}
+              onDelete={(event) => { this.deleteHandler(index) }}
+              inputValue={val.name}
+            />
+          </ErrorBoundary>
         )
       })
     } else {
@@ -106,10 +109,11 @@ class App extends Component {
       <div className={cls.join(' ')}>
         <h1 className={classes.headTitle}>{this.state.title}</h1>
         <i className="fab fa-battle-net"></i>
+        <Counter />
+        <hr />
         <input type="text" onChange={this.onChangeHandler} />
-        <button onClick={this.changeTitle}>Click</button>
-        <br />
-        <br />
+        <button onClick={this.changeTitle} style={{ margin: 'auto', marginBottom: '20px', display: 'block' }}>Click</button>
+
         <button onClick={() => { this.changeToggleComponents(this.state.showComponents) }}>Toggle</button>
         {books}
         <button onClick={this.state.clickHandler}>alert</button>
